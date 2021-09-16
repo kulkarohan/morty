@@ -21,6 +21,9 @@ contract MortyVault is ERC20Upgradeable, ERC721HolderUpgradeable {
     /// @notice the address who initially deposited the NFT
     address public curator;
 
+    /// @notice the amount of mortys in the vault
+    uint256 public balance;
+
     /// @notice a boolean to indicate if the vault has closed
     bool public vaultClosed;
 
@@ -56,6 +59,16 @@ contract MortyVault is ERC20Upgradeable, ERC721HolderUpgradeable {
     }
 
     /// ============ Curator Functions ============
+
+    function start() external {
+        require(msg.sender == curator);
+
+        // transfer 50 tokens to vault
+        this.transferFrom(curator, payable(address(this)), 50000000000000000000);
+        balance = 50000000000000000000;
+
+        // trigger Martingale RNG
+    }
 
     function swapCollateral(uint256 _tokenId) external {
         require(msg.sender == curator, 'Only curator can replace collateral');
